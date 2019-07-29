@@ -103,6 +103,12 @@ static char *active_clients_buf;
 static s8 ep_reg_idx;
 static void *ipa_ipc_low_buff;
 
+#define IPA_MAX_DEBUG_MSG_LEN (IPA_MAX_MSG_LEN * 6)
+#define IPA_DEBUG_MSG_DUMP_HW 0 /*1: enable, 0: disable*/
+static int ipa_msg_buff_count;
+static char *ipa_msg_buff;
+static ssize_t ipa3_read_dump_debug_msg(struct file*,
+		char __user*, size_t, loff_t*);
 
 static ssize_t ipa3_read_gen_reg(struct file *file, char __user *ubuf,
 		size_t count, loff_t *ppos)
@@ -2880,6 +2886,8 @@ void ipa3_debugfs_init(void)
 	if (active_clients_buf == NULL)
 		goto fail;
 
+	ipa_msg_buff = NULL;
+
 	file = debugfs_create_u32("enable_clock_scaling", IPA_READ_WRITE_MODE,
 		dent, &ipa3_ctx->enable_clock_scaling);
 	if (!file) {
@@ -4809,3 +4817,4 @@ static ssize_t ipa3_read_dump_debug_msg(
 
 	return ret;
 }
+
