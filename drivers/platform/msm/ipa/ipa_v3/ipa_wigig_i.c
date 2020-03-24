@@ -1862,9 +1862,6 @@ fail_stop_channel:
 	return res;
 }
 
-#ifndef CONFIG_DEBUG_FS
-int ipa3_wigig_init_debugfs_i(struct dentry *parent) { return 0; }
-#else
 int ipa3_wigig_init_debugfs_i(struct dentry *parent)
 {
 	const mode_t read_write_mode = 0664;
@@ -1913,4 +1910,3 @@ fail:
 	wigig_dent = NULL;
 	return -EFAULT;
 }
-#endif
