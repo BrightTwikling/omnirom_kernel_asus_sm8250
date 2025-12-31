@@ -14,6 +14,7 @@
 #include <linux/ipa_uc_offload.h>
 #include <linux/pci.h>
 #include "ipa_api.h"
+#include "ipa_v3/ipa_i.h"
 
 /*
  * The following for adding code (ie. for EMULATION) not found on x86.
