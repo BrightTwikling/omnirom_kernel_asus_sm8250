@@ -103,7 +103,7 @@ static char *active_clients_buf;
 static s8 ep_reg_idx;
 static void *ipa_ipc_low_buff;
 
-#define IPA_MAX_DEBUG_MSG_LEN (IPA_MAX_MSG_LEN * 6)
+#define IPA_MAX_DEBUG_MSG_LEN (IPA_MAX_MSG_LEN * 8)
 #define IPA_DEBUG_MSG_DUMP_HW 0 /*1: enable, 0: disable*/
 static int ipa_msg_buff_count;
 static char *ipa_msg_buff;
@@ -799,7 +799,7 @@ static ssize_t ipa3_read_rt(struct file *file, char __user *ubuf, size_t count,
 	struct ipa3_rt_tbl *tbl;
 	struct ipa3_rt_entry *entry;
 	struct ipa3_rt_tbl_set *set;
-	enum ipa_ip_type ip = (enum ipa_ip_type)(long)file->private_data;
+	enum ipa_ip_type ip = (enum ipa_ip_type)file->private_data;
 	u32 ofst;
 	u32 ofst_words;
 
@@ -896,7 +896,7 @@ static ssize_t ipa3_read_rt(struct file *file, char __user *ubuf, size_t count,
 static ssize_t ipa3_read_rt_hw(struct file *file, char __user *ubuf,
 	size_t count, loff_t *ppos)
 {
-	enum ipa_ip_type ip = (enum ipa_ip_type)(long)file->private_data;
+	enum ipa_ip_type ip = (enum ipa_ip_type)file->private_data;
 	int tbls_num;
 	int rules_num;
 	int tbl;
@@ -1064,7 +1064,7 @@ static ssize_t ipa3_read_flt(struct file *file, char __user *ubuf, size_t count,
 	int j;
 	struct ipa3_flt_tbl *tbl;
 	struct ipa3_flt_entry *entry;
-	enum ipa_ip_type ip = (enum ipa_ip_type)(long)file->private_data;
+	enum ipa_ip_type ip = (enum ipa_ip_type)file->private_data;
 	struct ipa3_rt_tbl *rt_tbl;
 	u32 rt_tbl_idx;
 	u32 bitmap;
@@ -1135,7 +1135,7 @@ static ssize_t ipa3_read_flt_hw(struct file *file, char __user *ubuf,
 	int rl;
 	int rules_num;
 	struct ipahal_flt_rule_entry *rules;
-	enum ipa_ip_type ip = (enum ipa_ip_type)(long)file->private_data;
+	enum ipa_ip_type ip = (enum ipa_ip_type)file->private_data;
 	u32 rt_tbl_idx;
 	u32 bitmap;
 	int res = 0;
@@ -2841,6 +2841,10 @@ static const struct ipa3_debugfs_file debugfs_files[] = {
 			.read = ipa3_read_usb_gsi_stats,
 		}
 	}, {
+		"ipa_statistics_msg", IPA_READ_ONLY_MODE, NULL, {
+			.read = ipa3_read_dump_debug_msg,
+		}
+	}, {
 		"app_clk_vote_cnt", IPA_READ_ONLY_MODE, NULL, {
 			.read = ipa3_read_app_clk_vote,
 		}
@@ -2885,8 +2889,6 @@ void ipa3_debugfs_init(void)
 			GFP_KERNEL);
 	if (active_clients_buf == NULL)
 		goto fail;
-
-	ipa_msg_buff = NULL;
 
 	file = debugfs_create_u32("enable_clock_scaling", IPA_READ_WRITE_MODE,
 		dent, &ipa3_ctx->enable_clock_scaling);
