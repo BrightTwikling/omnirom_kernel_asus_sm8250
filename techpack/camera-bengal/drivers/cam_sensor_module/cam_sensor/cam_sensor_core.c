@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
- * Copyright (c) 2023, The Linux Foundation. All rights reserved.
- * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  */
 
 #include <linux/module.h>
@@ -282,7 +280,7 @@ end:
 }
 
 static int32_t cam_sensor_i2c_modes_util(
-	struct camera_io_master *io_master_info,
+	struct cam_sensor_ctrl_t *s_ctrl,
 	struct i2c_settings_list *i2c_list)
 {
 	int32_t rc = 0;
@@ -1230,8 +1228,7 @@ int cam_sensor_apply_settings(struct cam_sensor_ctrl_t *s_ctrl,
 		if (i2c_set->is_settings_valid == 1) {
 			list_for_each_entry(i2c_list,
 				&(i2c_set->list_head), list) {
-				rc = cam_sensor_i2c_modes_util(
-					&(s_ctrl->io_master_info),
+				rc = cam_sensor_i2c_modes_util(s_ctrl,
 					i2c_list);
 				if (rc < 0) {
 					CAM_ERR(CAM_SENSOR,
@@ -1248,8 +1245,7 @@ int cam_sensor_apply_settings(struct cam_sensor_ctrl_t *s_ctrl,
 			i2c_set->request_id == req_id) {
 			list_for_each_entry(i2c_list,
 				&(i2c_set->list_head), list) {
-				rc = cam_sensor_i2c_modes_util(
-					&(s_ctrl->io_master_info),
+				rc = cam_sensor_i2c_modes_util(s_ctrl,
 					i2c_list);
 				if (rc < 0) {
 					CAM_ERR(CAM_SENSOR,

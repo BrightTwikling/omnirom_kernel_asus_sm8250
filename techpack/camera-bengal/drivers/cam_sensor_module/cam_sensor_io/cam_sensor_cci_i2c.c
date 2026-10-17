@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  */
 
 #include "cam_sensor_cmn_header.h"
@@ -125,8 +124,8 @@ static int32_t cam_cci_i2c_write_table_cmd(
 	cci_ctrl.cfg.cci_i2c_write_cfg.data_type = write_setting->data_type;
 	cci_ctrl.cfg.cci_i2c_write_cfg.addr_type = write_setting->addr_type;
 	cci_ctrl.cfg.cci_i2c_write_cfg.size = write_setting->size;
-	rc = cam_cci_client_ops(client->cci_client->cci_subdev, VIDIOC_MSM_CCI_CFG,
-		&cci_ctrl);
+	rc = v4l2_subdev_call(client->cci_client->cci_subdev,
+		core, ioctl, VIDIOC_MSM_CCI_CFG, &cci_ctrl);
 	if (rc < 0) {
 		CAM_ERR(CAM_SENSOR, "Failed rc = %d", rc);
 		return rc;
